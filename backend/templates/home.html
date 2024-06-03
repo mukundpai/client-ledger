@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/logout">Logout</a>
+    </nav>
+    <div class="container">
+        <h1>Welcome, {{ user_name }}!</h1>
+        <p>You are successfully logged in.</p>
+        <button id="createServiceBtn">Create New Service</button>
+    </div>
+
+    <div id="createServiceForm" style="display: none;">
+        <h2>Create New Service</h2>
+        <form id="serviceForm">
+            <label for="service_title">Title:</label>
+            <input type="text" id="service_title" name="service_title" required><br><br>
+
+            <label for="client_id">Client ID:</label>
+            <input type="text" id="client_id" name="client_id" required><br><br>
+
+            <label for="category_id">Category ID:</label>
+            <input type="text" id="category_id" name="category_id" required><br><br>
+
+            <label for="service_type_id">Service Type ID:</label>
+            <input type="text" id="service_type_id" name="service_type_id" required><br><br>
+
+            <button type="submit">Create Service</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('createServiceBtn').addEventListener('click', function() {
+            document.getElementById('createServiceForm').style.display = 'block';
+        });
+
+        document.getElementById('serviceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/api/services', {
+                method: 'POST',
+                body: JSON.stringify(Object.fromEntries(formData)),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Service created successfully!');
+                document.getElementById('createServiceForm').style.display = 'none';
+            })
+            .catch(error => {
+                alert('Error creating service: ' + error.message);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "axios": "^1.7.2"
+  },
+  "scripts": {
+    "build": "cd frontend && npm run build",
+    "postbuild": "cp -r frontend/build backend/static"
+  }
+}
+
